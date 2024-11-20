@@ -26,9 +26,7 @@ El código cubre casos de `q` entre 1 y 7, cada uno con un conjunto específico 
 La función **`gaussian_quad(f, xq, wq)`** implementa la fórmula de la cuadratura de Gauss-Legendre para aproximar la integral de una función `f` sobre el intervalo $[-1, 1]$.
 
 La integral se aproxima de la siguiente manera:
-$$
-\int_{-1}^{1} f(x) \, dx \approx \sum_{i=1}^{q} w_i f(x_i)
-$$
+$$\int_{-1}^{1} f(x) \, dx \approx \sum_{i=1}^{q} w_i f(x_i)$$
 - **Entrada**:
   - `f`: Función a integrar.
   - `xq`: Nodos de la cuadratura de Gauss-Legendre.
@@ -42,15 +40,11 @@ Estas funciones se utilizan para cambiar el intervalo de integración de $[-1, 1
 - **`T(x, a, b)`**: Realiza la transformación lineal de un punto `x` del intervalo estándar $[-1, 1]$ al intervalo $[a, b]$.
   
   La fórmula es:
-  $$
-  T(x) = \frac{(b-a)x + (b+a)}{2}
-  $$
+  $$T(x) = \frac{(b-a)x + (b+a)}{2}$$
 - **`T_inv(x, a, b)`**: Realiza la transformación inversa de un punto `x` del intervalo $[a, b]$ al intervalo estándar $[-1, 1]$.
   
   La fórmula es:
-  $$
-  T^{-1}(x) = \frac{2}{b-a} \left( x - \frac{a+b}{2} \right)
-  $$
+  $$T^{-1}(x) = \frac{2}{b-a} \left( x - \frac{a+b}{2} \right)$$
 
 ### 5. Polinomios de Lagrange y sus Derivadas
 
@@ -69,7 +63,7 @@ Estos diccionarios permiten una consulta eficiente de los polinomios y sus deriv
 
 ### 7. Evaluación de Polinomios de Lagrange y Derivadas
 
-- **`L(x, l, p)`**: Esta función evalúa el polinomio de Lagrange de grado \(p\) en el punto \(x\) para el índice $l$. Consulta el diccionario `MD` para obtener el polinomio correspondiente y luego lo evalúa.
+- **`L(x, l, p)`**: Esta función evalúa el polinomio de Lagrange de grado $p$ en el punto $x$ para el índice $l$. Consulta el diccionario `MD` para obtener el polinomio correspondiente y luego lo evalúa.
   
 - **`dL(x, l, p)`**: Similar a la función anterior, pero evalúa la derivada del polinomio de Lagrange. Consulta el diccionario `dMD` para obtener la derivada y luego la evalúa.
 
@@ -78,15 +72,11 @@ Estos diccionarios permiten una consulta eficiente de los polinomios y sus deriv
 Las matrices de masa y rigidez son componentes fundamentales en los métodos de elementos finitos. Estas matrices se construyen a partir de las funciones base (polinomios de Lagrange) y sus derivadas.
 
 - **Matriz de Masa (`M_loc`)**: Representa la integral de los productos de los polinomios de Lagrange:
-  $$
-  M_{ij} = \int_{-1}^{1} L_i(x) \cdot L_j(x) \, dx
-  $$
+  $$M_{ij} = \int_{-1}^{1} L_i(x) \cdot L_j(x) \, dx$$
   Esta matriz se arma usando la cuadratura de Gauss-Legendre para calcular las integrales.
   
 - **Matriz de Rigidez (`S_loc`)**: Similar a la de masa, pero involucra las derivadas de los polinomios de Lagrange:
-  $$
-  S_{ij} = \int_{-1}^{1} dL_i(x) \cdot dL_j(x) \, dx
-  $$
+  $$S_{ij} = \int_{-1}^{1} dL_i(x) \cdot dL_j(x) \, dx$$
   
 Estas matrices se utilizan en los métodos de elementos finitos para representar la relación entre las fuerzas y los desplazamientos en los problemas de mecánica estructural o física computacional.
 
@@ -94,7 +84,7 @@ Claro, a continuación te doy una descripción detallada de las funciones que me
 
 ### 9. **RHS (Right Hand Side)**
 
-El vector del lado derecho (RHS) en problemas de elementos finitos generalmente representa la parte del problema que no depende de la solución directa, como las fuentes o términos externos que se deben considerar. En este contexto, el RHS generalmente incluye la aplicación de una función externa en el dominio y su integración sobre los elementos. La función `RHS` calcula el vector del lado derecho para un sistema de ecuaciones discretizado. Dependiendo del problema, puede estar relacionada con un término de fuente $f(x)$, es decir, la integral de $f(x) \cdot L_i(x)$, donde $L_i(x)$ es un polinomio de Lagrange.
+El vector del lado derecho (RHS) en problemas de elementos finitos generalmente representa la parte del problema que no depende de la solución directa, como las fuentes o términos externos que se deben considerar. En este contexto, el RHS generalmente incluye la aplicación de una función externa en el dominio y su integración sobre los elementos. La función `RHS` calcula el vector del lado derecho para un sistema de ecuaciones discretizado. Dependiendo del problema, puede estar relacionada con un término de fuente $f(x)$, es decir, la integral de $f(x)\cdot L_i(x)$, donde $L_i(x)$ es un polinomio de Lagrange.
 
 **Entrada:**
 - `f : callable`: Función a integrar, la cual puede representar una fuente o término en la ecuación.
@@ -118,16 +108,14 @@ Las condiciones de Dirichlet se aplican cuando conocemos el valor de la solució
 **Salida:**
 - `K, rhs`: Matriz de rigidez modificada y el vector del lado derecho con las condiciones de Dirichlet aplicadas.
 
-### 11. **Norma $ L^2 $**
+### 11. **Norma $L^2$**
 
-La norma $ L^2 $ se utiliza para medir el "tamaño" de una función en el espacio $ L^2 $, que es la norma asociada a la integral del cuadrado de la función.
+La norma $L^2$ se utiliza para medir el "tamaño" de una función en el espacio $L^2$, que es la norma asociada a la integral del cuadrado de la función.
 
 #### Descripción
 La función `L2_Norm` calcula la norma $ L^2 $ de una función aproximada utilizando los polinomios de Lagrange. La norma se define como:
 
-$$
-\| u \|_{L^2} = \left( \int_a^b |u(x)|^2 dx \right)^{1/2}
-$$
+$$\| u \|_{L^2} = \left( \int_a^b |u(x)|^2 dx \right)^{1/2}$$
 
 **Entrada:**
 - `u : callable`: La función aproximada cuya norma $ L^2 $ se quiere calcular.
@@ -140,23 +128,21 @@ $$
 
 ### 12. **Norma $ H^1 $**
 
-La norma $ H^1 $ es una norma del espacio de Sobolev, que es una extensión de la norma $ L^2 $ que también toma en cuenta las derivadas de la función.
+La norma $H^1$ es una norma del espacio de Sobolev, que es una extensión de la norma $L^2$ que también toma en cuenta las derivadas de la función.
 
 #### Descripción
 La función `H_Norm` calcula la norma $ H^1 $, que se define como:
 
-$$
-\| u \|_{H^1} = \left( \| u \|_{L^2}^2 + \| u' \|_{L^2}^2 \right)^{1/2}
-$$
+$$\| u \|_{H^1} = \left( \| u \|_{L^2}^2 + \| u' \|_{L^2}^2 \right)^{1/2}$$
 
 Esto mide no solo la magnitud de la función, sino también la de su derivada.
 
 **Entrada:**
-- `u : callable`: La función aproximada cuya norma $ H^1 $ se quiere calcular.
-- `du : callable`: La derivada de la función $ u $.
+- `u : callable`: La función aproximada cuya norma $H^1$ se quiere calcular.
+- `du : callable`: La derivada de la función $u$.
 - `xq : numpy.ndarray`: Nodos de cuadratura de Gauss.
 - `wq : numpy.ndarray`: Pesos de la cuadratura de Gauss.
 
 **Salida:**
-- `norm_H : float`: El valor de la norma $ H^1 $.
+- `norm_H : float`: El valor de la norma $H^1$.
 
